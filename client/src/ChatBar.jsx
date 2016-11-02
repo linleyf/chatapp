@@ -17,7 +17,7 @@ class ChatBar extends Component {
 
   handleSubmit(event) {
     if (event.key === 'Enter') {
-        this.props.changeHandler(this.state.aMessage); //this.state.aMessage is a string containing the message content
+        this.props.addMessage(this.state.aMessage); //this.state.aMessage is a string containing the message content
         event.target.value ="";
       }
 
