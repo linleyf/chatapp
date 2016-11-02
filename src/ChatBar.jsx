@@ -5,13 +5,22 @@ class ChatBar extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {newMessage: 'gfh'};
+    this.state = {aMessage: ''};
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit=this.handleSubmit.bind(this);
 
   }
 
   handleChange(event) {
-      this.setState({newMessage: event.target.value});
+      this.setState({aMessage: event.target.value});
+  }
+
+  handleSubmit(event) {
+    if (event.key === 'Enter') {
+        this.props.changeHandler(this.state.aMessage); //this.state.aMessage is a string containing the message content
+        event.target.value ="";
+      }
+
   }
 
   render() {
@@ -25,8 +34,9 @@ class ChatBar extends Component {
             id="new-message"
             type="text"
             placeholder="Type a message and hit ENTER"
-            value={this.state.newMessage}
-            onChange={this.handleChange} />
+            value={this.state.aMessage}
+            onChange={this.handleChange}
+            onKeyDown={this.handleSubmit} />
       </footer>
     );
   }
