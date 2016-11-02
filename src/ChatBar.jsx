@@ -15,11 +15,12 @@ class ChatBar extends Component {
   }
 
   render() {
+    console.log(this.props.currentUser)
     return (
       <footer>
           <input id="username"
             type="text" placeholder="Your Name (Optional)"
-            value={this.props.currentUser} />
+            value={this.props.currentUser.name} />
           <input
             id="new-message"
             type="text"
