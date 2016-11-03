@@ -7,12 +7,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.socket = new WebSocket("ws://www.localhost:4000");
-    this.addMessage=this.addMessage.bind(this);
-      this.state = {
-        currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: [],
-        socket: {}
-      }
+    this.addMessage = this.addMessage.bind(this);
+    this.newName = this.newName.bind(this);
+    this.state = {
+      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      messages: [],
+      socket: {}
+    }
   }
 
   addMessage(newMessage) {
@@ -26,6 +27,13 @@ class App extends Component {
     };
     this.socket.send(JSON.stringify(newMessageObject));
     };
+
+  newName(username) {
+    this.setState({currentUser: {name: username}})
+
+
+
+  }
 
   printMessage(id, username, content) {
     let incomingMessage = {id: id, username: username, content: content};
@@ -60,7 +68,8 @@ class App extends Component {
            <h1>Chatty</h1>
          </nav>
             <MessageList messages={this.state.messages}></MessageList>
-            <ChatBar currentUser={this.state.currentUser} addMessage={this.addMessage} socket={this.socket}></ChatBar>
+            <ChatBar currentUser={this.state.currentUser} addMessage={this.addMessage}
+              newName={this.newName} socket={this.socket}></ChatBar>
         </div>
      );
    }
