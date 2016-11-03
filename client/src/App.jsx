@@ -15,15 +15,6 @@ class App extends Component {
       }
   }
 
-  componentDidMount() {
-  console.log("componentDidMount <App />");
-
-    this.socket.onopen = function (event) {
-    console.log("probably connected to server");
-    };
-
-  }
-
   addMessage(newMessage) {
     let id = this.state.messages.length +1;
     let username = this.state.currentUser.name;
@@ -33,12 +24,31 @@ class App extends Component {
       username: username,
       content: content
     };
+    this.socket.send(JSON.stringify(newMessageObject));
+    };
 
-  this.socket.send(JSON.stringify(newMessageObject));
+  printMessage(id, username, content) {
+    let incomingMessage = {id: id, username: username, content: content};
+    let messages = this.state.messages.concat(incomingMessage);
+    this.setState({messages: messages});
+  }
 
-  // let messages =this.state.messages.concat(newMessageObject)
-  // this.setState({messages: messages});
-  // console.log(this.state);
+  componentDidMount() {
+  console.log("componentDidMount <App />");
+
+    this.socket.onopen = function (event) {
+    console.log("probably connected to server");
+    };
+
+    this.socket.onmessage = (event) => {
+    console.log(event);
+    let message = JSON.parse(event.data);
+    let id = message.id;
+    let username = message.username;
+    let content = message.content;
+
+    this.printMessage(id, username, content);
+    };
   }
 
 
