@@ -15,7 +15,7 @@ class ChatBar extends Component {
   }
 
   handleChangemessage(event) {
-      this.setState({aMessage: event.target.value});
+    this.setState({aMessage: event.target.value});
   }
 
   handleSubmitmessage(event) {
@@ -23,7 +23,6 @@ class ChatBar extends Component {
         this.props.addMessage(this.state.aMessage); //this.state.aMessage is a string containing the message content
         this.setState({aMessage: ""});
       }
-
   }
 
   handleChangename(event) {
@@ -34,7 +33,6 @@ class ChatBar extends Component {
     if (event.key === 'Enter') {
         this.props.newName(this.state.name);
       }
-
   }
 
   render() {

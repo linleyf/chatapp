@@ -23,16 +23,21 @@ class App extends Component {
     let newMessageObject = {
       id: id,
       username: username,
-      content: content
+      content: content,
+      type: "postMessage"
     };
     this.socket.send(JSON.stringify(newMessageObject));
-    };
+  }
 
   newName(username) {
-    this.setState({currentUser: {name: username}})
+    let oldName = this.state.currentUser.name;
+    let postNotification = {
+      type: "postNotification",
+      content: oldName + ' changed their name to ' + username
+    };
 
-
-
+    this.socket.send(JSON.stringify(postNotification));
+    this.setState({currentUser: {name: username}});
   }
 
   printMessage(id, username, content) {
@@ -41,22 +46,49 @@ class App extends Component {
     this.setState({messages: messages});
   }
 
+  //create what do I do when when a mesage comes in?
+  //What should I do when a name changes?
+  //printNotification function (similiar to printMessage)
+
+  printNotification(content) {
+    let usernameChange = content
+    let newname =  this.state.messages.concat({notification: usernameChange}); 
+    this.setState({messages: newname});
+  }
+
+
   componentDidMount() {
   console.log("componentDidMount <App />");
 
     this.socket.onopen = function (event) {
-    console.log("probably connected to server");
+      console.log("probably connected to server");
     };
 
     this.socket.onmessage = (event) => {
-    console.log(event);
-    let message = JSON.parse(event.data);
-    let id = message.id;
-    let username = message.username;
-    let content = message.content;
+      let message = JSON.parse(event.data);
+      let type = message.type      
+      let id = message.id;
+      let username = message.username;
+      let content = message.content;
+      console.log("here is type", type)
 
-    this.printMessage(id, username, content);
+      if (type === "incomingMessage") {
+        this.printMessage(id, username, content);
+      } else if (type === "incomingNotification") {
+      
+      this.printNotification(content);
+
+      }
+
     };
+
+   //2) THIS.SOCKET.SOMETHING function simliar to onmessage
+    
+
+ 
+
+
+
   }
 
 
