@@ -12,7 +12,8 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
-      socket: {}
+      socket: {}, 
+      usersOnline: 1
     }
   }
 
@@ -40,6 +41,7 @@ class App extends Component {
     this.setState({currentUser: {name: username}});
   }
 
+
   printMessage(id, username, content) {
     let incomingMessage = {id: id, username: username, content: content};
     let messages = this.state.messages.concat(incomingMessage);
@@ -56,6 +58,9 @@ class App extends Component {
     this.setState({messages: newname});
   }
 
+  updateUsercount(newUsersonline) {
+    this.setState({usersOnline: newUsersonline});
+  }
 
   componentDidMount() {
   console.log("componentDidMount <App />");
@@ -75,20 +80,13 @@ class App extends Component {
       if (type === "incomingMessage") {
         this.printMessage(id, username, content);
       } else if (type === "incomingNotification") {
-      
-      this.printNotification(content);
-
+        this.printNotification(content);
+      } else if (type === "userCount" ) {
+        console.log(message.data.usersOnline)
+        this.updateUsercount(message.data.usersOnline);
       }
-
     };
-
-   //2) THIS.SOCKET.SOMETHING function simliar to onmessage
-    
-
- 
-
-
-
+      
   }
 
 
@@ -96,8 +94,9 @@ class App extends Component {
      console.log(this.state)
      return (
        <div className="wrapper">
-         <nav>
+         <nav className="navbar">
            <h1>Chatty</h1>
+           <span className="userCount"> <b>Users Online:</b> {this.state.usersOnline} </span>
          </nav>
             <MessageList messages={this.state.messages}></MessageList>
             <ChatBar currentUser={this.state.currentUser} addMessage={this.addMessage}
